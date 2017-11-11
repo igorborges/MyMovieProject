@@ -18,6 +18,7 @@ import java.util.List;
 
 import static android.view.View.GONE;
 import static com.example.igorb.mymovieproject.MainActivity.data;
+import static com.example.igorb.mymovieproject.R.id.progressBar;
 
 /**
  * Created by igorb on 10/11/2017.
@@ -27,7 +28,6 @@ class MoviesAdapter extends RecyclerView.Adapter {
 
 	private List<Result> movies;
 	private Context context;
-	private static ProgressBar progressBar;
 
 	public MoviesAdapter(List<Result> movies, Context context) {
 		this.movies = movies;
@@ -46,7 +46,6 @@ class MoviesAdapter extends RecyclerView.Adapter {
 	public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
 		MyViewHolder mHolder = (MyViewHolder) holder;
 		Result movie = movies.get(position);
-		progressBar = mHolder.progressBar;
 
 		String data = "";
 		data += "<b>Year:</b> " + movie.getYear() + "<br/>";
@@ -70,8 +69,6 @@ class MoviesAdapter extends RecyclerView.Adapter {
 		ImageView bmImage;
 
 		public DownloadImageTask(MyViewHolder holder) {
-
-			progressBar.setVisibility(View.VISIBLE);
 			this.bmImage = holder.moviePoster;
 		}
 
@@ -89,7 +86,6 @@ class MoviesAdapter extends RecyclerView.Adapter {
 		}
 
 		protected void onPostExecute(Bitmap result) {
-			progressBar.setVisibility(GONE);
 			bmImage.setImageBitmap(result);
 		}
 	}

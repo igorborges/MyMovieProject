@@ -15,6 +15,7 @@
         android:layout_width="fill_parent"
         android:layout_height="0dp"
         android:orientation="horizontal"
+        android:layout_margin="10dp"
         android:layout_weight="10">
 
         <EditText
@@ -22,7 +23,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="4"
-            android:text="Insira o nome do filme"
+            android:text="Type movie name"
             android:textSize="20dp"/>
 
         <ImageButton

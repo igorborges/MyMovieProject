@@ -26,12 +26,14 @@ public class ListActivity extends AppCompatActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_recyclerview);
+		setTitle("My IMDB Movie List");
 
 		Hawk.init(getApplicationContext()).build();
 		FloatingActionButton fab = (FloatingActionButton) findViewById(R.id._floatingBtn);
 		moviesCache = Hawk.get("filmes");
 		movies = new ArrayList<>();
 
+		//get movies in cache
 		if (moviesCache != null) {
 			for (String movie : moviesCache) {
 				Result r = Hawk.get(movie);
@@ -40,9 +42,7 @@ public class ListActivity extends AppCompatActivity {
 		}
 
 		RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recycleview);
-
 		recyclerView.setAdapter(new MoviesAdapter(movies, this));
-
 		RecyclerView.LayoutManager layout = new LinearLayoutManager(this,
 				LinearLayoutManager.VERTICAL, false);
 

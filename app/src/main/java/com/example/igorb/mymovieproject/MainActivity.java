@@ -49,6 +49,8 @@ public class MainActivity extends AppCompatActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		Hawk.init(getApplicationContext()).build();
+//		getActionBar().setTitle("asdasd");
+		setTitle("Movie Search");
 
 		//Get data from activity
 		movieData = (TextView) findViewById(R.id.data);
@@ -59,6 +61,7 @@ public class MainActivity extends AppCompatActivity {
 		mProgressBar = (ProgressBar) findViewById(R.id.progressBar);
 		mProgressBar.setVisibility(View.GONE);
 
+		//Get movies in cache
 		movies = Hawk.get("filmes");
 		if(movies==null){
 			movies = new ArrayList<>();
@@ -105,14 +108,14 @@ public class MainActivity extends AppCompatActivity {
 						movies.add(movieName);
 						Hawk.put(movieName, result);
 						Hawk.put("filmes", movies);
-						EditMovieName.setText("Insira o nome do filme");
-						toast = Toast.makeText(getApplicationContext(), "Salvo com sucesso!", Toast.LENGTH_LONG);
+						EditMovieName.setText("Type movie name");
+						toast = Toast.makeText(getApplicationContext(), "Saved successfully!", Toast.LENGTH_LONG);
 
 					} else {
-						toast = Toast.makeText(getApplicationContext(), "Filme já cadastrado!", Toast.LENGTH_LONG);
+						toast = Toast.makeText(getApplicationContext(), "Movie already registered!", Toast.LENGTH_LONG);
 					}
 				} else {
-					toast = Toast.makeText(getApplicationContext(), "Insira o nome do filme!", Toast.LENGTH_LONG);
+					toast = Toast.makeText(getApplicationContext(), "Type movie name!", Toast.LENGTH_LONG);
 				}
 				btnSave.setVisibility(View.GONE);
 				toast.show();
@@ -120,6 +123,7 @@ public class MainActivity extends AppCompatActivity {
 			}
 		});
 
+		//Button List onClick
 		btnList.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {

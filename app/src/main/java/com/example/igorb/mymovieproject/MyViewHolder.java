@@ -15,13 +15,11 @@ public class MyViewHolder extends RecyclerView.ViewHolder {
 	final TextView movieTitle;
 	final TextView movieData;
 	final ImageView moviePoster;
-	final ProgressBar progressBar;
 
 	public MyViewHolder(View itemView) {
 		super(itemView);
 		movieData = (TextView) itemView.findViewById(R.id.movieData);
 		movieTitle = (TextView) itemView.findViewById(R.id.movieTitle);
 		moviePoster = (ImageView) itemView.findViewById(R.id.moviePoster);
-		progressBar = (ProgressBar) itemView.findViewById(R.id.progressBar);
 	}
 }
