@@ -55,6 +55,7 @@ public class ListActivity extends AppCompatActivity {
 			@Override
 			public void onClick(View v) {
 				startActivity(myIntent);
+				finish();
 			}
 		});
 	}

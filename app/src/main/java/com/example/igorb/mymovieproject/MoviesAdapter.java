@@ -11,9 +11,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 
 import java.io.InputStream;
 import java.util.List;
+
+import static android.view.View.GONE;
+import static com.example.igorb.mymovieproject.MainActivity.data;
 
 /**
  * Created by igorb on 10/11/2017.
@@ -23,6 +27,7 @@ class MoviesAdapter extends RecyclerView.Adapter {
 
 	private List<Result> movies;
 	private Context context;
+	private static ProgressBar progressBar;
 
 	public MoviesAdapter(List<Result> movies, Context context) {
 		this.movies = movies;
@@ -41,6 +46,7 @@ class MoviesAdapter extends RecyclerView.Adapter {
 	public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
 		MyViewHolder mHolder = (MyViewHolder) holder;
 		Result movie = movies.get(position);
+		progressBar = mHolder.progressBar;
 
 		String data = "";
 		data += "<b>Year:</b> " + movie.getYear() + "<br/>";
@@ -51,7 +57,7 @@ class MoviesAdapter extends RecyclerView.Adapter {
 		mHolder.movieTitle.setText(movie.getTitle());
 		mHolder.movieData.setText(Html.fromHtml(data));
 
-		new DownloadImageTask(mHolder.moviePoster).execute(movie.getPoster());
+		new DownloadImageTask(mHolder).execute(movie.getPoster());
 
 	}
 
@@ -63,8 +69,10 @@ class MoviesAdapter extends RecyclerView.Adapter {
 	public static class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
 		ImageView bmImage;
 
-		public DownloadImageTask(ImageView bmImage) {
-			this.bmImage = bmImage;
+		public DownloadImageTask(MyViewHolder holder) {
+
+			progressBar.setVisibility(View.VISIBLE);
+			this.bmImage = holder.moviePoster;
 		}
 
 		protected Bitmap doInBackground(String... urls) {
@@ -81,7 +89,9 @@ class MoviesAdapter extends RecyclerView.Adapter {
 		}
 
 		protected void onPostExecute(Bitmap result) {
+			progressBar.setVisibility(GONE);
 			bmImage.setImageBitmap(result);
 		}
 	}
+
 }

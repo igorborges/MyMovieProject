@@ -23,7 +23,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="4"
             android:text="Insira o nome do filme"
-            android:textSize="18sp"/>
+            android:textSize="20dp"/>
 
         <ImageButton
             android:id="@+id/btnSearch"
@@ -41,7 +41,7 @@
         android:layout_height="0dp"
         android:orientation="vertical"
         android:gravity="center"
-        android:layout_weight="80">
+        android:layout_weight="77">
 
         <TextView
             android:id="@+id/data"
@@ -59,41 +59,62 @@
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"/>
 
+        <ProgressBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:id="@+id/progressBar"/>
+
     </RelativeLayout>
 
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/:floatingBtnSave"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:layout_margin="16dp"
-        android:clickable="true"
-        android:src="@android:drawable/ic_menu_save"/>
-
-
-    <LinearLayout
+    <RelativeLayout
         android:id="@+id/linearLayout3"
-        android:gravity="bottom"
         android:layout_width="fill_parent"
         android:layout_height="0dp"
-        android:layout_weight="10">
+        android:layout_weight="13"
+        android:gravity="bottom"
+        android:weightSum="4">
 
-        <Button
-            android:id="@+id/btnSave"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Save"/>
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/:floatingBtnSave"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="10dp"
+            android:background="@android:color/black"
+            android:backgroundTint="@android:color/holo_blue_light"
+            android:layout_alignParentLeft="true"
+            android:clickable="true"
+            android:src="@android:drawable/ic_menu_save"
+            app:backgroundTint="@android:color/holo_blue_light"/>
 
-        <Button
-            android:id="@+id/btnLoad"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Load"/>
 
-    </LinearLayout>
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/:floatingBtnList"
+            android:layout_width="match_parent"
+            android:layout_height="fill_parent"
+            android:layout_margin="10dp"
+            android:clickable="true"
+            android:src="@drawable/ic_format_list_bulleted_black_24dp"
+            android:layout_alignParentRight="true"
+            />
+
+        <!--<Button-->
+        <!--android:id="@+id/btnSave"-->
+        <!--android:layout_width="0dp"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_weight="1"-->
+        <!--android:text="Save"/>-->
+
+        <!--<Button-->
+        <!--android:id="@+id/btnLoad"-->
+        <!--android:layout_width="0dp"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_weight="1"-->
+        <!--android:text="Load"/>-->
+
+    </RelativeLayout>
+    -->
 
 
 </LinearLayout>

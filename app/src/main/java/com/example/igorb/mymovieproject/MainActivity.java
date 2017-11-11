@@ -7,7 +7,6 @@ import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Html;
 import android.util.Log;
@@ -16,6 +15,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -41,8 +41,8 @@ public class MainActivity extends AppCompatActivity {
 	private static GetData getData;
 	private static EditText EditMovieName;
 	private static Result result;
-	private static List<String> movies = new ArrayList<>();
-	private static boolean isList = false;
+	private static ProgressBar mProgressBar;
+	private static List<String> movies;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -55,7 +55,15 @@ public class MainActivity extends AppCompatActivity {
 		ImageButton btnSearch = (ImageButton) findViewById(R.id.btnSearch);
 		EditMovieName = (EditText) findViewById(R.id.movieName);
 		final FloatingActionButton btnSave = (FloatingActionButton) findViewById(R.id._floatingBtnSave);
+		final FloatingActionButton btnList = (FloatingActionButton) findViewById(R.id._floatingBtnList);
+		mProgressBar = (ProgressBar) findViewById(R.id.progressBar);
+		mProgressBar.setVisibility(View.GONE);
 
+		movies = Hawk.get("filmes");
+		if(movies==null){
+			movies = new ArrayList<>();
+		}
+		btnSave.setVisibility(View.INVISIBLE);
 
 		//Retrofit build with basic URL
 		Retrofit retrofit = new Retrofit.Builder().baseUrl(URL).addConverterFactory(GsonConverterFactory.create()).build();
@@ -66,12 +74,15 @@ public class MainActivity extends AppCompatActivity {
 			@Override
 			public void onClick(View v) {
 				closeKeyboard();
-				movieName = EditMovieName.getText().toString().replace(" ", "").toLowerCase();
+				movieName = EditMovieName.getText().toString();
+				mProgressBar.setVisibility(View.VISIBLE);
 				if (Hawk.contains(movieName)) {
 					Result r = Hawk.get(movieName);
 					displayResult(r);
-				} else
+				} else {
 					loadMovieData();
+					btnSave.setVisibility(View.VISIBLE);
+				}
 			}
 		});
 
@@ -89,28 +100,34 @@ public class MainActivity extends AppCompatActivity {
 			@Override
 			public void onClick(View v) {
 				Toast toast;
-				if (isList) {
-					startActivity(myIntent);
-				} else {
-					if (movieName != null) {
-						if (!Hawk.contains(movieName)) {
-							movies.add(movieName);
-							Hawk.put(movieName, result);
-							Hawk.put("filmes", movies);
-							btnSave.setImageDrawable(ContextCompat.getDrawable(getApplicationContext(), R.drawable.ic_format_list_bulleted_black_24dp));
-							EditMovieName.setText("Insira o nome do filme");
-							toast = Toast.makeText(getApplicationContext(), "Salvo com sucesso!", Toast.LENGTH_SHORT);
-						} else {
-							toast = Toast.makeText(getApplicationContext(), "Filme já cadastrado!", Toast.LENGTH_SHORT);
-						}
+				if (movieName != null) {
+					if (!Hawk.contains(movieName)) {
+						movies.add(movieName);
+						Hawk.put(movieName, result);
+						Hawk.put("filmes", movies);
+						EditMovieName.setText("Insira o nome do filme");
+						toast = Toast.makeText(getApplicationContext(), "Salvo com sucesso!", Toast.LENGTH_LONG);
+
 					} else {
-						toast = Toast.makeText(getApplicationContext(), "Insira o nome do filme!", Toast.LENGTH_SHORT);
+						toast = Toast.makeText(getApplicationContext(), "Filme já cadastrado!", Toast.LENGTH_LONG);
 					}
-					toast.show();
+				} else {
+					toast = Toast.makeText(getApplicationContext(), "Insira o nome do filme!", Toast.LENGTH_LONG);
 				}
+				btnSave.setVisibility(View.GONE);
+				toast.show();
+
 			}
 		});
-		
+
+		btnList.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				startActivity(myIntent);
+				finish();
+			}
+		});
+
 	}
 
 	private void loadMovieData() {
@@ -179,6 +196,7 @@ public class MainActivity extends AppCompatActivity {
 		}
 
 		protected void onPostExecute(Bitmap result) {
+			mProgressBar.setVisibility(View.INVISIBLE);
 			bmImage.setImageBitmap(result);
 		}
 	}
