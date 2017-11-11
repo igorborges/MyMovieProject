@@ -12,6 +12,7 @@ import android.text.Html;
 import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -37,10 +38,11 @@ public class MainActivity extends AppCompatActivity {
 	public static final String APIKEY = "90490335";
 	public static String movieName;
 	public static String data = "";
-	private static TextView movieData;
+	private TextView movieData;
 	private static GetData getData;
-	private static EditText EditMovieName;
+	private EditText EditMovieName;
 	private static Result result;
+	private static FloatingActionButton btnSave;
 	private static ProgressBar mProgressBar;
 	private static List<String> movies;
 
@@ -49,21 +51,20 @@ public class MainActivity extends AppCompatActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		Hawk.init(getApplicationContext()).build();
-//		getActionBar().setTitle("asdasd");
 		setTitle("Movie Search");
 
 		//Get data from activity
 		movieData = (TextView) findViewById(R.id.data);
 		ImageButton btnSearch = (ImageButton) findViewById(R.id.btnSearch);
 		EditMovieName = (EditText) findViewById(R.id.movieName);
-		final FloatingActionButton btnSave = (FloatingActionButton) findViewById(R.id._floatingBtnSave);
+		btnSave = (FloatingActionButton) findViewById(R.id._floatingBtnSave);
 		final FloatingActionButton btnList = (FloatingActionButton) findViewById(R.id._floatingBtnList);
 		mProgressBar = (ProgressBar) findViewById(R.id.progressBar);
 		mProgressBar.setVisibility(View.GONE);
 
 		//Get movies in cache
-		movies = Hawk.get("filmes");
-		if(movies==null){
+		movies = Hawk.get("movies");
+		if (movies == null) {
 			movies = new ArrayList<>();
 		}
 		btnSave.setVisibility(View.INVISIBLE);
@@ -76,15 +77,16 @@ public class MainActivity extends AppCompatActivity {
 		btnSearch.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				closeKeyboard();
 				movieName = EditMovieName.getText().toString();
-				mProgressBar.setVisibility(View.VISIBLE);
-				if (Hawk.contains(movieName)) {
-					Result r = Hawk.get(movieName);
-					displayResult(r);
-				} else {
-					loadMovieData();
-					btnSave.setVisibility(View.VISIBLE);
+				if (!movieName.equals("") && !movieName.equals("Type movie name")) {
+					closeKeyboard();
+					if (Hawk.contains(movieName)) {
+						Result r = Hawk.get(movieName);
+						displayResult(r);
+					} else {
+						loadMovieData();
+
+					}
 				}
 			}
 		});
@@ -107,7 +109,7 @@ public class MainActivity extends AppCompatActivity {
 					if (!Hawk.contains(movieName)) {
 						movies.add(movieName);
 						Hawk.put(movieName, result);
-						Hawk.put("filmes", movies);
+						Hawk.put("movies", movies);
 						EditMovieName.setText("Type movie name");
 						toast = Toast.makeText(getApplicationContext(), "Saved successfully!", Toast.LENGTH_LONG);
 
@@ -141,7 +143,11 @@ public class MainActivity extends AppCompatActivity {
 			@Override
 			public void onResponse(Call<Result> call, Response<Result> response) {
 				Result result = response.body();
-				displayResult(result);
+				if (result.getTitle() != null) {
+					displayResult(result);
+					mProgressBar.setVisibility(View.VISIBLE);
+					btnSave.setVisibility(View.VISIBLE);
+				}
 			}
 
 			@Override
@@ -200,7 +206,7 @@ public class MainActivity extends AppCompatActivity {
 		}
 
 		protected void onPostExecute(Bitmap result) {
-			mProgressBar.setVisibility(View.INVISIBLE);
+			mProgressBar.setVisibility(View.GONE);
 			bmImage.setImageBitmap(result);
 		}
 	}

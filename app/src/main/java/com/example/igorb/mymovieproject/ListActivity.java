@@ -30,7 +30,7 @@ public class ListActivity extends AppCompatActivity {
 
 		Hawk.init(getApplicationContext()).build();
 		FloatingActionButton fab = (FloatingActionButton) findViewById(R.id._floatingBtn);
-		moviesCache = Hawk.get("filmes");
+		moviesCache = Hawk.get("movies");
 		movies = new ArrayList<>();
 
 		//get movies in cache
